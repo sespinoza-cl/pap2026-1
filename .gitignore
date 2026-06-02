@@ -1,0 +1,19 @@
+# Generated figure files (re-created by run_figures.m)
+outputs/**/*.png
+outputs/**/*.tif
+outputs/**/*.pdf
+outputs/**/*.eps
+outputs/**/*.fig
+outputs/**/*.txt
+
+# Pre-computed workspaces are tracked — do NOT ignore .mat files
+# outputs/**/*.mat  ← intentionally NOT ignored
+
+# MATLAB session files
+*.asv
+*.m~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
