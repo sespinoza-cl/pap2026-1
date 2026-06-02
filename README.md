@@ -3,7 +3,8 @@
 **"Rhythmic mastication entrains frontocentral β-band amplitude via corticomuscular phase–amplitude coupling during working memory"**
 
 Espinoza S., Moraga-Espinoza D., Morreal-Ortega L., El-Deredy W. (2025). *Scientific Reports.*  
-DOI: [10.1038/s41598-025-27606-5](https://doi.org/10.1038/s41598-025-27606-5)
+DOI: [10.1038/s41598-025-27606-5](https://doi.org/10.1038/s41598-025-27606-5)  
+Repository: [github.com/sespinoza-cl/pap2026-1](https://github.com/sespinoza-cl/pap2026-1)
 
 ---
 
