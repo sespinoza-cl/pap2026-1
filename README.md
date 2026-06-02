@@ -2,8 +2,7 @@
 
 **"Rhythmic mastication entrains frontocentral β-band amplitude via corticomuscular phase–amplitude coupling during working memory"**
 
-Espinoza S., Moraga-Espinoza D., Morreal-Ortega L., El-Deredy W. (2025). *Scientific Reports.*  
-DOI: [10.1038/s41598-025-27606-5](https://doi.org/10.1038/s41598-025-27606-5)  
+Espinoza S., Moraga-Espinoza D., Morreal-Ortega L., El-Deredy W. (2026). *Manuscript under review.*  
 Repository: [github.com/sespinoza-cl/pap2026-1](https://github.com/sespinoza-cl/pap2026-1)
 
 ---
@@ -154,14 +153,13 @@ Scripts S02, S03, S06, and S08 require the raw EEG dataset (~12 GB total). To ru
 ## Citation
 
 ```bibtex
-@article{espinoza2025,
+@article{espinoza2026,
   title   = {Rhythmic mastication entrains frontocentral β-band amplitude via
              corticomuscular phase–amplitude coupling during working memory},
   author  = {Espinoza, Sebastian and Moraga-Espinoza, Daniel and
              Morreal-Ortega, Luis and El-Deredy, Wael},
-  journal = {Scientific Reports},
-  year    = {2025},
-  doi     = {10.1038/s41598-025-27606-5}
+  year    = {2026},
+  note    = {Manuscript under review}
 }
 ```
 
