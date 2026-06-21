@@ -1,0 +1,15 @@
+=== FOOOF (S3b — Python specparam) — P2V1 ===
+N_casos=31 | N_controles=15 | ROI=Fp1, AF7, AF3, F1, F3, F5, F7, FC1, Fpz, Fp2, AF8, AF4, AFz, Fz, F2, F4, FC2, FCz
+FIT_RANGE=[3,35] Hz | WIN_TASK=[0,1500] ms
+
+Exponente aperiódico:
+  Cases  Nc: 1.110 ± 0.239
+  Cases  Ch: 0.735 ± 0.220   Wilcoxon p=0.0000 ***
+  Controls Nc: 1.065 ± 0.329
+  Controls Ch: 1.030 ± 0.287   Wilcoxon p=0.3894 NS
+
+Figuras:
+  S3b_FOOOF_PSD.png       — PSD broadband
+  S3b_FOOOF_Exponent.png  — Boxplot exponent Cases
+  S3b_FOOOF_DeltaPeriodic.png — Delta residual
+  S3b_FOOOF_Panel.png     — Panel combinado

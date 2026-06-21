@@ -1,0 +1,134 @@
+################################################################
+##  SUPERSEDED / STALE — NO USAR  (2026-06-19)                ##
+##  Reemplazado por outputs/reviewer/RESULTS_CANONICAL.md     ##
+##  Números obsoletos aquí: 15/31 (canónico 22/31), beta      ##
+##  13-20 (canónico 13-30), ROI_FC 4 elec (canónico ROI-18),  ##
+##  supresión beta p=0.021 (no se reproduce). Sin lenguaje TMD.##
+################################################################
+================================================================
+PAC (Phase-Amplitude Coupling) — Resultados completos P2V1
+Script: S4_PAC_fullband.m (existente) + S4b análisis Python
+Fecha: 2026-06-18
+N = 31 casos
+ROI: ROI_FC_LABELS (frontocentral, desde S0_config)
+BAND_PHASE: EMG filtrado en f_chew_individual ± 0.5 Hz → Hilbert
+BANDS_AMP: theta [4-7 Hz] / alpha [8-12 Hz] / beta [13-20 Hz]
+WIN_LATE = [900, 1300] ms  |  WIN_EARLY = [300, 900] ms
+WIN_BASE = [-500, 0] ms
+MI: Tort 2010 (18 bins)  |  N_SURR = 500 circular-shift
+================================================================
+
+── BLOQUE A: PAC CONTINUO (señal completa, ~12 min) ─────────────
+  Validación principal: theta MI sobre null individual
+
+  zMI theta (EMG phase × theta amplitude):
+    N=31 sujetos, f_chew individual (Media=1.57 ± 0.20 Hz)
+    z-score: Media=6.98 ± SD (Mdn≈2.1, IQR≈[0.1, 8.5])
+    Sujetos con zMI > 1.96: 15/31 (48%)
+    Binomial p (15/31 vs p=0.05) = 4.26e-12  ***
+    Wilcoxon (z vs 0) = 2.16e-05  ***
+
+  Nota: 1 sujeto con z≈85 (outlier extremo, PAC muy fuerte).
+  Wilcoxon robusto a outliers.
+
+── BLOQUE B: PAC POR VENTANA (Early / Late / Base) ──────────────
+
+  -- MI absoluto por banda × ventana (medias grupales) --
+
+  Banda    | Baseline    | Early      | Late
+  ---------|-------------|------------|------------
+  theta    | 6.17e-4     | 5.67e-4    | 6.49e-4
+  alpha    | 7.64e-4     | 7.63e-4    | 8.04e-4
+  beta     | 14.20e-4    | 11.65e-4   | 9.90e-4
+
+  -- Delta MI (Late - Base) por banda --
+
+  theta: ΔMI = +3.24e-5   Wilcoxon p = 0.861  n.s.
+  alpha: ΔMI = +3.94e-5   Wilcoxon p = 0.478  n.s.
+  beta:  ΔMI = -43.03e-5  Wilcoxon p = 0.021  *   ← SUPRESIÓN
+
+  Friedman (delta MI × 3 bandas): chi2=2.07, p=0.356  n.s.
+  [La Friedman sobre delta NO es sig; la sig. de beta es robusta
+   pero el efecto entre bandas no lo es como factor global]
+
+  -- MI_late × banda (comparación absoluta) --
+
+  Friedman (MI_late × 3 bandas): chi2=6.87, p=0.032  *
+  Post-hoc Wilcoxon (uncorrected):
+    theta vs alpha: p=0.165  n.s.
+    theta vs beta:  p=0.010  **
+    alpha vs beta:  p=0.047  *
+  → Beta > theta y beta > alpha en WIN_LATE (en términos absolutos)
+    PERO: el MI_base beta era aún mayor (14.20e-4) → decrece en Late
+
+  -- Fase preferida (Rayleigh sobre pref_late por banda) --
+
+  ps_late: theta=0.190, alpha=0.244, beta=0.373  (todos NS)
+  → No hay fase preferida consistente entre sujetos en WIN_LATE
+    para ninguna banda (coherente con PAC variable en frecuencia)
+
+── CORRELACIONES (Revisor M2) ────────────────────────────────────
+
+  rho (theta_late × IES): -0.24, p=0.190  n.s.
+  rho (theta_cont × IES): -0.02, p=0.918  n.s.
+  → No hay correlación PAC-conducta significativa.
+    P-valores robustos (Wilcoxon en bloque A sig igual).
+
+── INTERPRETACIÓN ────────────────────────────────────────────────
+
+  Argumento principal (theta PAC genuino):
+  El acoplamiento theta-EMG es significativamente mayor que el
+  null individual (zMI>0, p=2.2e-5) en 15/31 sujetos (binom p<1e-11).
+  El null usa circular-shift preservando autocorrelación y amplitud,
+  descartando artefactos de 1/f y varianza.
+
+  Argumento contra aplanamiento aperiódico (Revisor):
+  Si el flattening 1/f (Bloque FOOOF) elevara no-específicamente la
+  amplitud en todas las bandas, el MI debería aumentar en TODAS:
+    - theta: Δ ≈ 0, n.s.
+    - alpha: Δ ≈ 0, n.s.
+    - beta:  Δ < 0, p=0.021 (SUPRESIÓN SIGNIFICATIVA)
+  → La beta PAC se SUPRIME en WIN_LATE, incompatible con inflación
+    no-específica por 1/f. Esto valida que el theta PAC (sobre null)
+    refleja acoplamiento específico de banda, no confound aperiódico.
+
+  Nota metodológica:
+  La zMI fue calculada SOLO para theta (la hipótesis principal).
+  Alpha/beta no tienen null individual comparable. La comparación
+  de delta MI (Late-Base) entre bandas es la evidencia de especificidad.
+
+── FIGURAS GENERADAS ─────────────────────────────────────────────
+
+  MAIN:
+    S4b_PAC_zMI_theta.png
+      — Distribución zMI theta vs null (box+scatter, Y cap=22)
+      — n=15/31 sig, Wilcoxon p<0.0001, binom p<0.0001
+
+    S4b_PAC_theta_specificity.png  [2-panel]
+      — Panel A: ΔMI (Late-Base) × 3 bandas
+        theta n.s., alpha n.s., beta * (p=0.021)
+      — Panel B: MI_late × 3 bandas (Friedman p=0.032)
+        theta < beta (*), alpha < beta (*)
+
+  Copiadas a:
+    Paper_plots/Final_Figures/
+    Analysis_V1_Final/outputs/figures_ok/
+
+── TEXTO PARA RESPONSE_TO_REVIEWER1 (R1.M2 / R1.M9) ────────────
+
+  "To address the concern that theta PAC might reflect non-specific
+  amplification due to aperiodic 1/f slope flattening, we compared
+  modulation indices across three frequency bands (theta [4-7 Hz],
+  alpha [8-12 Hz], and beta [13-20 Hz]) in WIN_LATE. If aperiodic
+  flattening drove broadband amplitude increases, all bands should
+  show elevated PAC in WIN_LATE relative to baseline. Instead, beta-band
+  PAC significantly decreased from baseline (ΔMI: Wilcoxon p=0.021),
+  while theta and alpha showed no significant change (p>0.46). This
+  pattern is inconsistent with a non-specific 1/f confound. Furthermore,
+  theta PAC (continuous block) significantly exceeded its individual
+  amplitude-matched, phase-shuffled null distribution in 15/31 cases
+  (Wilcoxon z-score vs null: p<0.0001; binomial test: p=4.3×10⁻¹²),
+  confirming genuine cross-frequency coupling at the individual chewing
+  frequency in the theta band."
+
+================================================================

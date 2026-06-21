@@ -1,0 +1,97 @@
+################################################################
+##  SUPERSEDED (2026-06-19) — ver RESULTS_CANONICAL.md         ##
+##  Los valores FOOOF (χ, % pico theta) son canónicos (ROI-18, ##
+##  4-7) y siguen válidos, PERO el texto interpretativo dice    ##
+##  "TMD/clinical group" — INCORRECTO: ambos grupos son sanos,  ##
+##  diferencia = masticación. No usar el lenguaje clínico.      ##
+################################################################
+================================================================
+FOOOF / specparam — Resultados completos P2V1
+Pipeline: S3b_FOOOF_fromPython.m + S3c_FOOOF_paper_figs.m
+Fecha: 2026-06-18
+N = 31 casos + 15 controles
+ROI: Fp1, AF7, AF3, F1, F3, F5, F7, FC1, Fpz, Fp2, AF8, AF4, AFz, Fz,
+     F2, F4, FC2, FCz  (18 electrodos — sig_int_fdr interacción theta)
+FIT_RANGE = [3, 35] Hz | WIN_TASK = [0, 1500] ms
+PSD: Welch (NFFT=750, 50% overlap) sobre épocas concatenadas
+================================================================
+
+── EXPONENTE APERIÓDICO (χ) ─────────────────────────────────────
+
+  Cases   No Chew : 1.110 ± 0.239
+  Cases   Chew    : 0.735 ± 0.220   ← aplanamiento drástico
+  Controls No Chew: 1.065 ± 0.329
+  Controls Chew   : 1.030 ± 0.287
+
+  Wilcoxon Cases Ch vs Nc    : p < 0.0001  ***
+  Wilcoxon Controls Ch vs Nc : p = 0.3894  NS
+
+  Interpretación:
+  La masticación produce aplanamiento significativo del componente
+  aperiódico (1/f) exclusivamente en casos. Los controles no muestran
+  cambio (especificidad de grupo). El efecto es grande: Δχ ≈ −0.38
+  (reducción del 33% en la pendiente).
+
+── PEAK THETA GENUINO (residual > 0.1 dB sobre 1/f, 4–7 Hz) ────
+
+  Cases   No Chew : 27/31 = 87%   CF = 6.45 ± 0.44 Hz
+  Cases   Chew    : 30/31 = 97%   CF = 6.58 ± 0.20 Hz
+  Controls No Chew: 13/15 = 87%   CF = 6.55 ± 0.24 Hz
+  Controls Chew   : 15/15 = 100%  CF = 6.56 ± 0.33 Hz
+
+  Interpretación:
+  El peak theta es detectable sobre el componente aperiódico en
+  prácticamente todos los sujetos en todas las condiciones.
+  La frecuencia central (CF ≈ 6.5 Hz) está en el centro de la
+  banda theta (4–7 Hz), descartando artefacto de borde de banda
+  (responde a Revisor M3).
+
+── CALIDAD DE AJUSTE ────────────────────────────────────────────
+
+  R² medio ≈ 1.000 en todas las condiciones (Welch desde épocas
+  concatenadas produce PSDs suaves, ajuste excelente).
+
+── DOS MECANISMOS SEPARADOS EN CASES-CHEW ───────────────────────
+
+  (1) Aplanamiento aperiódico (χ: 1.11→0.74, p<0.001):
+      Refleja cambio en excitabilidad cortical/neuromodulación
+      durante masticación en TMD. Exclusivo de casos.
+
+  (2) Oscilación theta genuina (97% con peak detectable):
+      El theta existe como oscilación sobre el 1/f — no es
+      artefacto del cambio de pendiente. El TF-CBPT confirmó
+      independientemente que theta es la banda principal de efecto
+      (cluster p=0.010, WIN_LATE 900–1300 ms, interacción p=0.0002).
+
+  Ambos mecanismos contribuyen al incremento de potencia theta
+  observado en el análisis TF.
+
+── FIGURAS GENERADAS ────────────────────────────────────────────
+
+  MAIN:
+    S3c_FOOOF_broadband_PSD.png      — PSD + fits aperiódicos (4 grupos)
+    S3c_FOOOF_exponent_Cases.png     — Boxplot χ Cases: NoChew vs Chew (***)
+    S3c_FOOOF_exponent_Controls.png  — Boxplot χ Controls: NoChew vs Chew (NS)
+
+  SUPPLEMENTARY:
+    S3c_FOOOF_periodic_residual.png  — Componente periódico absoluto
+
+  Copiadas a:
+    Paper_plots/Final_Figures/
+    Analysis_V1_Final/outputs/figures_ok/
+
+── TEXTO PARA RESPONSE_TO_REVIEWER1 (R1.M3) ────────────────────
+
+  "Specparam (FOOOF) analysis confirmed that theta oscillations
+  represent genuine rhythmic activity rather than a spurious 1/f
+  artifact. Theta peaks above the aperiodic component were detected
+  in 97% of cases during chewing (CF = 6.58 ± 0.20 Hz, centrally
+  within the 4–7 Hz band). Additionally, chewing in cases produced
+  a significant flattening of the aperiodic exponent (χ: 1.11 → 0.74,
+  Wilcoxon p < 0.001), absent in controls (p = 0.39), indicating a
+  concurrent neuromodulatory change specific to the clinical group.
+  These two mechanisms — genuine theta oscillations and aperiodic
+  slope flattening — both contribute to the theta power increase
+  confirmed by the TF cluster analysis (p = 0.010)."
+
+================================================================

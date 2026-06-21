@@ -1,0 +1,81 @@
+================================================================================
+RESULTS_TO_PASTE — Paper2 V1 (números CANÓNICOS, listos para pegar)
+Fuente: RESULTS_CANONICAL.md · 2026-06-20 · θ=4–7 α=8–13 β=13–30 · N=31 casos + 15 ctrl
+Diseño SANO sin TMD. Marco DUAL θ-cognitivo + β-CMC (β-PAC ANÁLOGO a CMC, no "=CMC").
+REGLA: estos reemplazan los STALE del letter viejo (ρ=+0.364, slope −12.89, RT 618→544).
+================================================================================
+
+------------------------------------------------------------ [1] CONDUCTA
+RT casos:   591±112 → 519±123 ms · ΔRT=−72.4 · Wilcoxon p=0.0001 · d=−0.58
+RT ctrl:    584±98  → 571±176 ms · ΔRT=−13.5 · n.s.
+IES casos:  994±496 → 812±437   · ΔIES=−182 · Wilcoxon p=0.0008 · d=−0.49
+IES ctrl:   939±251 → 984±679   · ΔIES=+45  · n.s.
+Acc casos:  0.736 → 0.787 (+0.05)
+LME RT:  Bloque p=6.3e-5 · Grupo p=0.86 (sin dif basal) · Grupo×Bloque p=0.054 (TENDENCIA)
+LME IES: Grupo×Bloque p=0.106 (n.s.)
+Baseline B1 equivalente: RT p=0.98 · IES p=0.725.
+CLAVE: mejora DENTRO de casos es sólida (Wilcoxon); el contraste DIFERENCIAL vs práctica
+es sólo tendencia (p=0.054). NO usar t-pareado (test equivocado para RT/IES sesgados).
+
+------------------------------------------------------------ [2] TF / TOPOGRAFÍA
+CBPT 2D fullband: Casos cluster p=0.005 · Controles p=1.0 (n.s.) · Interacción p=0.010.
+Eje tiempo (casos, CBPT por banda): θ p=0.037 · α p=0.0036 · β p=0.049 (TODAS sig).
+Topografía interacción θ → ROI-18 frontal; Casos Ch>Nc FDR: Fpz (pFDR=0.013), AFz (0.038).
+Disociación espacial A1: frontal-medial sig · temporal 0/6.
+ROI-18: Fp1 AF7 AF3 F1 F3 F5 F7 FC1 Fpz Fp2 AF8 AF4 AFz Fz F2 F4 FC2 FCz.
+NOTA: la "especificidad theta" vive en TOPOGRAFÍA (no en eje tiempo). No decir theta-específico en magnitud.
+
+------------------------------------------------------------ [3] FOOOF / specparam
+Pico θ genuino sobre aperiódico: 97% casos-chew (CF=6.58 Hz, central en 4–7) → responde M3.
+Exponente aperiódico χ casos: 1.110 → 0.735 (Wilcoxon p<0.0001) [APLANAMIENTO]
+Exponente χ controles: 1.065 → 1.030 (n.s.)
+Interpretación: posible desplazamiento del balance E/I (proxy 1/f; Gao 2017) — "consistente con", inferido.
+[OJO: el slope −12.89→−8.65 del letter viejo es PARAMETRIZACIÓN DISTINTA y STALE → usar χ 1.110→0.735.]
+
+------------------------------------------------------------ [4] PAC (fase masticatoria → amplitud cortical)
+EMG = promedio bilateral masetero 65+66. f_chew = 1.547 ± 0.152 Hz (30/31; 1 vía fallback EMG-PSD).
+Doble null: circular-shift (min 5 s) + AAFT (N_SURR=500). zMI vs null de la PROPIA condición.
+
+P1 — θ-PAC > null (Cases-Chew, N=31):
+  circ:  M z=13.32 · Mdn=9.16 · 22/31 (>1.96) · Wilcoxon 1-sided p=7.82e-6
+  AAFT:  M z=12.85 · Mdn=8.20 · 21/31 · p=1.03e-5 · supera AMBOS: 21/31
+  [22/31 reemplaza el STALE 15/31.]
+
+P2 — banda (zMI doble null): θ Mz=13.32 (22/31) · α Mz=22.55 (24/31) · β Mz=88.10 (29/31)
+  AAFT: θ 12.85 · α 22.27 · β 120.44. Friedman p<0.0001. → BROADBAND, β el MÁS FUERTE.
+
+P3 — ventana (MI Tort θ, mediana): Base 5.3e-4 · Early 3.4e-4 · Late 1.03e-3.
+  Friedman p=0.0007 · Late>Early p=0.001 · Late vs Base p=0.086.
+
+P4 — Ch vs Nc (null por condición): zMI θ Ch M=13.32 vs Nc M=1.08 (7/31) · Wilcoxon p=0.0001.
+
+Rayleigh fase preferida (Cases-Chew): θ R=0.659 Z=13.47 · α R=0.605 Z=11.33 · β R=0.652 Z=13.16 (p<0.0001).
+
+Comodulograma 2D (S4h): cluster sig p<0.0001 pero BROADBAND fa=[4–30 Hz], fp=[0.4–1.8 Hz]. Reportar DESCRIPTIVO.
+
+PAC × conducta (Spearman, Cases-Chew, N=31): zMI θ circ × RT ρ=+0.01 p=0.97 ·
+  MI θ Late × RT ρ=−0.22 p=0.23 · × IES ρ=−0.08 p=0.69 → TODOS n.s.
+  *** El ρ=−0.377 / +0.364 histórico NO se reproduce → CONTRADICHO. NO usar en el letter. ***
+
+------------------------------------------------------------ [5] CONTROL NEGATIVO (S8)
+Controles (no mastican) en su bloque "Ch": zMI θ M=0.52, Mdn=0.20, 1/15 sig, Wilcoxon p=0.094 (n.s.).
+2×2 completo: Casos-Chew 13.32 (22/31) ≫ Casos-NoChew 1.08 (7/31) ≈ Controles-"Chew" 0.52 (1/15).
+→ El acoplamiento aparece SÓLO con ritmo masticatorio genuino. Control negativo más directo.
+
+------------------------------------------------------------ [6] CONTROLES DE ARTEFACTO (A1–A6)
+A1 frontal-medial sig (Fpz pFDR=0.013, AFz 0.038); temporal 0/6.
+A2 χ 1.11→0.74 + pico θ 97%.
+A3 EMG masetero real × Δθ ρ=−0.22 n.s.
+A4 AAFT 21/31 + sharpness × zMI ρ=0.17 n.s.
+A5 Ch≫Nc p=0.0001.
+A6 PAC × conducta n.s.
+Veredicto: el confound motor NO sostiene el efecto.
+
+------------------------------------------------------------ [7] RECONCILIACIÓN STALE → CANÓNICO
+RT casos:        618.2→543.7 (STALE)  →  591→519, Wilcoxon p=0.0001 (CANÓNICO)
+PAC θ k>null:    15/31 (STALE)        →  22/31 circ + 21/31 AAFT
+FOOOF exponente: slope −12.89→−8.65   →  χ 1.110→0.735, p<0.0001
+PAC×IES:         ρ=+0.364 p=0.044     →  n.s. (CONTRADICHO; eliminar)
+Rayleigh θ:      R=0.626 Z=12.14      →  R=0.659 Z=13.47
+f_chew:          1.525±0.192          →  1.547±0.152
+Especificidad θ: vía correlación cond. →  vía TOPOGRAFÍA + CONDICIÓN + FOOOF (no magnitud PAC)

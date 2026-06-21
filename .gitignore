@@ -1,19 +1,18 @@
-# Generated figure files (re-created by run_figures.m)
-outputs/**/*.png
-outputs/**/*.tif
-outputs/**/*.pdf
-outputs/**/*.eps
-outputs/**/*.fig
-outputs/**/*.txt
+# Raw/large data — NOT in repo (request from corresponding author)
+*.set
+*.fdt
+*.bdf
+data/computed/
+Data_PAC/
 
-# Pre-computed workspaces are tracked — do NOT ignore .mat files
-# outputs/**/*.mat  ← intentionally NOT ignored
+# Pre-computed workspaces (.mat) and figure panels (.png) ARE tracked for reproducibility.
 
-# MATLAB session files
+# Python / MATLAB / OS
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
 *.asv
 *.m~
-
-# OS files
 .DS_Store
 Thumbs.db
 desktop.ini

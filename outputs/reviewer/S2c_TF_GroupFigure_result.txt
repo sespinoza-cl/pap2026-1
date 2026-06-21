@@ -1,0 +1,11 @@
+=== S2c TF Group Figure — CBPT 2D fullband ===
+2026-06-17 | N_PERM=5000 | alpha_voxel=0.05
+
+Cases  (N=31): cluster stat=15988.90, p=0.0050
+Controls (N=15): cluster stat=0.00, p=1.0000
+Interaction: cluster stat=15299.37, p=0.0100
+
+Topos — electrodos sig (FDR q<0.05):
+  Cases: 2  (Fpz, AFz)
+  Controls: 0
+  Interaction: 18  (Fp1, AF7, AF3, F1, F3, F5, F7, FC1, Fpz, Fp2, AF8, AF4, AFz, Fz, F2, F4, FC2, FCz)

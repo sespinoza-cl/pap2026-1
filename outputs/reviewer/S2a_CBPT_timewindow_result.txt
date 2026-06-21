@@ -1,0 +1,17 @@
+=== S2a CBPT 2D Ventana Temporal — P2V1 Revision ===
+Fecha: 2026-06-17 12:08
+N_CASES=31 | N_CONTROLS=15 | N_PERM=5000 | alpha_voxel=0.05 | seed=42
+
+Metodo: CBPT 2D en [freq x tiempo] por banda, dentro de WIN_ANALYSIS=[-200,1500]ms
+Consistente con S2_TF_cluster.m (Analysis_paper) — misma alpha_voxel=0.05
+
+--- CASOS (Chew > NoChew) ---
+Theta (4-7 Hz): stat=1985.34, p=0.0366 | WIN=[859, 1273] ms
+Alpha (8-13 Hz): stat=8461.85, p=0.0036 | WIN=[762, 1363] ms
+Beta (13-30 Hz): stat=4029.12, p=0.0486 | WIN=[777, 1172] ms
+
+--- CONTROLES ---
+Theta (4-7 Hz): stat=0.00, p=1.0000
+
+--- WIN_CBPT CANONICO ---
+WIN_CBPT = [859, 1273] ms

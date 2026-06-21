@@ -1,0 +1,18 @@
+=== S2b CBPT Electrodos — P2V1 Revision ===
+Fecha: 2026-06-17 12:09
+N_CASES=31 | N_PERM=5000 | seed=42
+
+WIN_CBPT = [859, 1273] ms
+theta_topo computada con WIN_LATE=[900,1300]ms
+
+--- CASOS ---
+t_thresh_FWER = 3.066 | Electrodos FWER: 3 | FDR: 2
+ROI_CBPT (FWER-permutation (max-t)):
+  N electrodos: 3
+  Labels: AF3, Fpz, AFz
+  AF3: t=3.255, p_fwer=0.0318, p_fdr=0.0600
+  Fpz: t=4.220, p_fwer=0.0028, p_fdr=0.0133
+  AFz: t=3.583, p_fwer=0.0142, p_fdr=0.0379
+
+--- CONTROLES ---
+t max=0.326 | ninguno esperado sig.

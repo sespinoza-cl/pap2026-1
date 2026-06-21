@@ -1,178 +1,79 @@
 # pap2026-1 — Code and Data for:
 
-**"Rhythmic mastication entrains frontocentral β-band amplitude via corticomuscular phase–amplitude coupling during working memory"**
+**"Rhythmic mastication couples to frontocentral theta and flattens the cortical aperiodic spectrum during working memory"**
 
-Espinoza S., Moraga-Espinoza D., Morreal-Ortega L., El-Deredy W. (2026). *Manuscript under review.*  
+Espinoza S., Moraga-Espinoza D., Morreal-Ortega L., El-Deredy W. (2026). *Manuscript under revision (R1).*
 Repository: [github.com/sespinoza-cl/pap2026-1](https://github.com/sespinoza-cl/pap2026-1)
 
+> **This branch (`v1-final`) supersedes the earlier β-CMC framing.** Re-analysis with a per-electrode
+> corticomuscular-coherence control showed the broadband β dominance is **residual masseter EMG (diffuse,
+> temporal topography), not corticomuscular coherence**. The cortically interpretable coupling is
+> **frontal-medial theta** (frontal, AAFT-robust, condition-specific, genuine FOOOF peak), accompanied by an
+> **aperiodic (1/f) flattening** indexing increased cortical excitability.
+
 ---
 
-## Quick start — reproduce all paper figures
+## Quick start
 
-> **Requirements:** MATLAB R2020b or later · Statistics and Machine Learning Toolbox · Signal Processing Toolbox · No EEGLAB needed.
+> **Requirements:** MATLAB R2025b (+ Statistics & Signal Processing Toolboxes; EEGLAB only for topoplots/.set)
+> and Python 3.10 (`numpy scipy h5py matplotlib mne fooof statsmodels pandas`).
 
-```matlab
-% 1. Clone or download this repository
-% 2. Open MATLAB, navigate to the repo root
-% 3. Run:
-run_figures
+All pre-computed result workspaces are in `outputs/stats/` (~6.5 MB). Figures regenerate from them:
+
+```bash
+# Python figures (read outputs/stats/, write outputs/figures/)
+python code/figA_py.py && python code/figA2_py.py && python code/figB_py.py
+# MATLAB topoplots / CMC topography
+matlab -batch "cd('code'); figA_topo; rev_cmc_topography"
 ```
 
-That's it. All figures are saved to `outputs/` as 300-dpi PNG files. No raw EEG data required — all necessary pre-computed workspaces are included in this repository (~1 MB total).
+Full step-by-step map (every result → script → data): see **[`REPRODUCE.md`](REPRODUCE.md)**.
 
 ---
 
-## Repository structure
-
+## What's here
 ```
 pap2026-1/
-├── run_figures.m              ← ENTRY POINT — run this
-├── S0_paths.m                 ← central config (paths + parameters)
-│
-├── code — analysis pipeline (S01–S09)
-│   ├── S01_Conducta.m         Behavioural stats (IES, effect sizes)
-│   ├── S02_TF_Correlaciones.m TF–behaviour correlations       [*]
-│   ├── S03_TF_ClusterPerm.m   Cluster-permutation (5 000 perms)[*]
-│   ├── S04_FOOOF_Figuras.m    FOOOF spectral decomposition
-│   ├── S05_FOOOF_LME.m        LME: Group × Condition (N = 45)
-│   ├── S06_PAC.m              Phase–amplitude coupling (PAC)   [*]
-│   ├── S07_Supplementary.m    Steiger Z, mediation, ITPC, Rayleigh
-│   ├── S08_ChewFreq.m         Chewing-frequency analysis       [*]
-│   └── S09_Figuras_Final.m    Figure compositor
-│
-├── plots/                     Figure-specific plot scripts (read workspaces)
-│   ├── P_PAC_Panels.m         Fig. 3 — PAC heatmap, scatter, violin
-│   ├── P_Rayleigh_Panels.m    Supp. Fig. S4 — polar phase histograms
-│   └── P_Supp_Panels.m        Supp. Fig. S3 — FOOOF, β-specificity, α-ERD
-│
-├── data/
-│   ├── data_beh_tb_45.mat     Behavioural data (N = 45, IES, RT, ACC)
-│   ├── incluidos45.mat        Participant list (30 Cases + 15 Controls)
-│   └── workspaces/
-│       └── FOOOF_Workspace.mat  Spectral decomposition (used by S04, S05)
-│
-└── outputs/                   Created at runtime; pre-computed .mat files
-    ├── Figure02_TF/
-    │   ├── chk_all_pwr_clean.mat    TF power matrix (N = 45)
-    │   └── chk_all_itpc_clean.mat   ITPC matrix (N = 45)
-    ├── Figure02b_TF_Correlaciones/
-    │   └── TF_band_metrics.mat      Band-power × IES correlations
-    └── Figure04_PAC/
-        ├── PAC_4Groups_Workspace.mat  Main PAC results (used by S07, plots)
-        └── PAC_EEG_Workspace.mat      EEG-phase PAC workspace
+├── REPRODUCE.md              ← full reproducibility map (start here)
+├── S0_config.m               ← single config (bands θ4–7/α8–13/β13–30, ROI-18, windows, seed=42)
+├── code/                     ← analysis + figure scripts (MATLAB S*.m + Python)
+│   ├── S1..S8 (canonical pipeline) · _figstyle.py (figure style)
+│   └── rev_*  (revision analyses: single-trial bridge, CMC topography, cross-study aperiodic)
+├── outputs/
+│   ├── stats/                ← pre-computed .mat (reproduce figures without raw EEG)
+│   ├── figures/              ← 300-dpi PNG panels (square, Okabe-Ito)
+│   └── reviewer/             ← canonical results, claims, revision analyses, panel review (docs)
+└── (raw EEG/EMG .set NOT included — see Data availability)
 ```
 
-`[*]` Scripts marked require raw EEG data (see [Full pipeline](#full-pipeline) below).
+## Key results (canonical)
+- **Behaviour:** chewing improves RT/IES within chewers (Wilcoxon p≤0.001); differential Group×Block a trend
+  (p=0.054; sensitivity: design powered only for large interactions, d≥0.90).
+- **TF/topo:** chew>no-chew cluster in chewers (p=0.005), interaction p=0.010; frontal-medial theta (Fpz/AFz FDR; temporal 0/6).
+- **FOOOF:** genuine theta peak (97%); aperiodic exponent flattens χ 1.110→0.735 (p<0.0001).
+- **PAC:** θ coupling over double null (22/31 circular, 21/31 AAFT); condition-specific; negative control 1/15.
+- **β = residual EMG:** per-electrode CMC diffuse/temporal (peak T8), no central maximum → not corticomuscular coherence.
+- **Brain–behaviour bridge:** single-trial late frontal-medial θ tracks RT (LMM −41.8 ms, p=0.0007; 23/31).
+- **Cross-study:** aperiodic also flattens offline (re-analysis of Espinoza et al. 2025; Δχ=−0.09, p=0.005).
 
----
+## Design
+46 healthy adults: 31 Cases (chewed in block 2) + 15 Controls (no-chew practice control). Visuospatial 2-back.
+BioSemi 64+8 (bilateral masseter EMG), 1024→256 Hz. ROI-18 frontal-medial. Bands θ 4–7 / α 8–13 / β 13–30 Hz.
 
-## What each figure contains
-
-| Paper figure | Script(s) | Output location |
-|---|---|---|
-| **Fig. 1A–B** — Behaviour (IES, RT) | `S01_Conducta` | `outputs/Figure01_Behavior/` |
-| **Fig. 1C–D** — FOOOF PSD + exponent | `S04_FOOOF_Figuras` | `outputs/Figure03_FOOOF/` |
-| **Fig. 2** — TF cluster-permutation | `S03_TF_ClusterPerm` [*] | `outputs/Figure02_TF/` |
-| **Fig. 3A** — PAC heatmap (ΔzMI) | `P_PAC_Panels` | `outputs/figures/P_Fig3A_PAC_Heatmap.png` |
-| **Fig. 3B** — β-PAC × IES scatter | `P_PAC_Panels` | `outputs/figures/P_Fig3B_BetaEarly_vs_IES.png` |
-| **Fig. 3D** — Violin 2×2 Group×Cond | `P_PAC_Panels` | `outputs/figures/P_Fig3D_Violin_BetaMid.png` |
-| **Supp. S2** — Supplementary stats | `S07_Supplementary` | `outputs/Supplementary/` |
-| **Supp. S3** — FOOOF residual + specificity + α-ERD | `P_Supp_Panels` | `outputs/figures/FigSN*.png` |
-| **Supp. S4** — Rayleigh polar plots | `P_Rayleigh_Panels` | `outputs/figures/P_Rayleigh_*.png` |
-
-All figures requiring cross-panel compositing (Figs. 1, 3) are provided as individual panels ready for assembly in Inkscape or similar.
-
----
-
-## Statistical outputs
-
-The MATLAB console and `outputs/Figure03_FOOOF/Reporte_FOOOF_LME.txt` report:
-
-- **Behavioural:** IES Wilcoxon signed-rank, Cohen's *d*, Mann–Whitney *U* (baseline equivalence)
-- **FOOOF LME:** `Exponent ~ Group × Condition + (1|ID)`, *t*(86), *p*-value, *N* = 45
-- **PAC:** Δ*z*MI Wilcoxon per band × window, Rayleigh *R* and *p*
-- **Brain–behaviour:** Spearman ρ (β-PAC × IES; α-power × IES), Steiger *Z*, bootstrapped mediation (2 000 iterations)
-
----
-
-## Full pipeline
-
-Scripts S02, S03, S06, and S08 require the raw EEG dataset (~12 GB total). To run them:
-
-1. Request the preprocessed EEG files from the corresponding author: `sebastian.espinoza@uv.cl`
-2. In `S0_paths.m`, set `DATA_ROOT` to your local copy of the dataset.
-3. Install [EEGLAB](https://sccn.ucsd.edu/eeglab/) and set `P.eeglab_path` accordingly.
-4. Run scripts in order: S01 → S02 → S03 → S04 → S05 → S06 → S07 → S08 → S09  
-   (or run `S00_RunAll.m` which executes the full sequence).
-
-> **Note:** S06_PAC uses `parfor` over 200 surrogates; a parallel pool accelerates it ~10× (tested on Ryzen 5900X, 12 cores). The Parallel Computing Toolbox is optional — S06 degrades gracefully to serial execution.
-
----
-
-## Experimental design
-
-### Participants
-- **N = 45**: 30 Cases (chewing intervention) + 15 Controls (no chewing)
-- Healthy right-handed adults without temporomandibular disorders (DC/TMD screened)
-- Two cases excluded for EEG/EMG quality: E3S3, E3S5
-
-### Task
-- Visuospatial 2-back working memory task (200-ms stimuli, 2000-ms ISI, 25% targets)
-- Performance metric: Inverse Efficiency Score (IES = median RT / proportion correct)
-
-### Conditions
-- **Cases:** Block 1 = No-Chew (baseline) → Block 2 = Chew (specially formulated gum)
-- **Controls:** Block 1 + Block 2 = No-Chew (practice-effect control)
-
-### EEG/EMG recording
-- BioSemi ActiveTwo: 64 scalp channels + 8 ExG channels (bilateral masseter EMG)
-- Sampling rate: 1024 Hz → downsampled to 256 Hz
-- Reference: common average (post-ICA)
-
-### Preprocessing pipeline
-1. 0.5 Hz HPF (zero-phase FIR)
-2. ZapLine-Plus (50 Hz line noise)
-3. iCanClean spatial regression (masseter EMG reference, 20 Hz HPF)
-4. ASR (burst criterion *k* = 15, 3-min resting baseline)
-5. AMICA ICA (trained on temporary 1.5 Hz HPF copy)
-6. ICLabel classification + EMG-envelope correlation rejection
-7. Spherical interpolation → common average re-reference
-
-### Key parameters
-| Parameter | Value |
-|---|---|
-| ROI | F1, FC1 (channels 12 & 16) |
-| Frequency bands | θ: 4–7 Hz · α: 8–12 Hz · β: 13–30 Hz |
-| Post-stimulus windows | Early: 0–300 ms · Mid: 200–700 ms · Late: 300–900 ms |
-| PAC method | Tort MI (18 bins, 200 surrogates → *z*MI) |
-| Cluster permutations | 5 000 · threshold *p* < 0.05 · cluster mass statistic |
-| FOOOF mode | Fixed aperiodic (3–40 Hz, no knee) |
-
----
+## Data availability
+Pre-computed workspaces are included. Raw/preprocessed EEG/EMG (`.set`, large) available from the corresponding
+author: `sebastian.espinoza@uv.cl`. The analysis is driven by a single config (`S0_config.m`) with fixed seeds,
+so every reported number regenerates deterministically.
 
 ## Citation
-
 ```bibtex
 @article{espinoza2026,
-  title   = {Rhythmic mastication entrains frontocentral β-band amplitude via
-             corticomuscular phase–amplitude coupling during working memory},
-  author  = {Espinoza, Sebastian and Moraga-Espinoza, Daniel and
-             Morreal-Ortega, Luis and El-Deredy, Wael},
-  year    = {2026},
-  note    = {Manuscript under review}
+  title  = {Rhythmic mastication couples to frontocentral theta and flattens the cortical
+            aperiodic spectrum during working memory},
+  author = {Espinoza, Sebastian and Moraga-Espinoza, Daniel and Morreal-Ortega, Luis and El-Deredy, Wael},
+  year   = {2026}, note = {Manuscript under revision}
 }
 ```
 
----
-
 ## License
-
-Code: MIT License.  
-Data: CC BY 4.0 — please cite the paper above if you use these materials.
-
----
-
-## Contact
-
-Sebastian Espinoza · `sebastian.espinoza@uv.cl`  
-Universidad de Valparaíso, Chile
+Code: MIT. Data: CC BY 4.0. Contact: Sebastian Espinoza · `sebastian.espinoza@uv.cl` · Universidad de Valparaíso.
