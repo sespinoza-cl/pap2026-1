@@ -108,33 +108,47 @@ def refline(ax, y, label=None, style=":", color="gray", lw=0.9, alpha=1.0, lx=No
         ax.text(x, y, label, va="bottom", ha="right", fontsize=_FS_TICK-1, color=color)
 
 def rose_v2(phi, R, color, band_lbl, stars, name, nb=12):
-    """Rose estilo v2: sectores rellenos desde el centro + círculo ref + cruz + vector
-    resultante (flecha) + etiquetas 0/π. axis equal off. Cuadrado, PNG@300."""
+    """Rose estilo v2: sectores rellenos + círculos de referencia graduados con etiqueta
+    de escala radial (n sujetos por bin) + vector resultante. Cuadrado, PNG@300."""
     phi = np.asarray(phi, float); phi = phi[~np.isnan(phi)]
     fig = plt.figure(figsize=(3.5, 3.5)); ax = fig.add_axes([0.02, 0.02, 0.96, 0.92])
     ax.set_aspect("equal"); ax.axis("off")
     edges = np.linspace(-np.pi, np.pi, nb+1)
     counts, _ = np.histogram(phi, edges)
     n_outer = int(counts.max())
-    rmax = n_outer * 1.25 + 0.5
+    # Round reference values for scale circles
+    n_mid = max(1, round(n_outer / 2))
+    rmax = n_outer * 1.30 + 0.5
+    tt = np.linspace(0, 2*np.pi, 120)
+    # Draw sectors
     for b in range(nb):
         if counts[b] == 0: continue
         th = np.linspace(edges[b], edges[b+1], 20)
         xs = np.concatenate([[0], counts[b]*np.sin(th), [0]])
         ys = np.concatenate([[0], counts[b]*np.cos(th), [0]])
         ax.fill(xs, ys, color=color, alpha=0.85, edgecolor="white", lw=0.5, zorder=2)
-    tt = np.linspace(0, 2*np.pi, 100)
+    # Outer frame circle (gray)
     ax.plot(rmax*np.sin(tt), rmax*np.cos(tt), "-", color="0.75", lw=0.8, zorder=1)
+    # Radial scale: mid circle (dashed) + max circle (dashed)
+    for nr, ls in [(n_mid, ":"), (n_outer, "--")]:
+        ax.plot(nr*np.sin(tt), nr*np.cos(tt), ls, color="0.65", lw=0.7, zorder=1)
+        # Label at ~45° (upper-right quadrant)
+        ang45 = np.pi / 4
+        ax.text(nr*np.sin(ang45)*1.06, nr*np.cos(ang45)*1.06,
+                str(nr), ha="left", va="bottom", fontsize=7.5, color="0.40")
+    # Cross lines
     ax.plot([-rmax, rmax], [0, 0], "-", color="0.85", lw=0.8, zorder=0)
     ax.plot([0, 0], [-rmax, rmax], "-", color="0.85", lw=0.8, zorder=0)
+    # Mean resultant vector
     mu = np.angle(np.mean(np.exp(1j*phi)))
-    ax.annotate("", xy=(rmax*0.9*R*np.sin(mu), rmax*0.9*R*np.cos(mu)), xytext=(0, 0),
+    ax.annotate("", xy=(rmax*0.88*R*np.sin(mu), rmax*0.88*R*np.cos(mu)), xytext=(0, 0),
                 arrowprops=dict(arrowstyle="-|>", color="k", lw=2.4), zorder=4)
+    # Cardinal labels and radius unit note
     ax.text(0, rmax*1.08, "0", ha="center", va="bottom", fontsize=9)
     ax.text(0, -rmax*1.08, "$\\pi$", ha="center", va="top", fontsize=10)
-    # Radius scale label: outer ring = n_outer subjects per bin
-    ax.text(rmax*1.04, 0, f"n={n_outer}", ha="left", va="center", fontsize=7.5, color="0.45")
-    ax.set_xlim(-rmax*1.18, rmax*1.42); ax.set_ylim(-rmax*1.22, rmax*1.18)
+    ax.text(0, -rmax*1.28, "radius = subjects per bin", ha="center", va="top",
+            fontsize=7, color="0.50")
+    ax.set_xlim(-rmax*1.20, rmax*1.20); ax.set_ylim(-rmax*1.35, rmax*1.15)
     ax.set_title(f"{band_lbl}   R={R:.2f}  {stars}", fontsize=_FS_TITLE, fontweight="normal")
     out = os.path.join(DIR_OUT, name+".png")
     fig.savefig(out, dpi=300, bbox_inches="tight", facecolor="white"); plt.close(fig)
