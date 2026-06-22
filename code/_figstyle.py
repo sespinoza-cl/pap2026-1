@@ -108,48 +108,54 @@ def refline(ax, y, label=None, style=":", color="gray", lw=0.9, alpha=1.0, lx=No
         ax.text(x, y, label, va="bottom", ha="right", fontsize=_FS_TICK-1, color=color)
 
 def rose_v2(phi, R, color, band_lbl, stars, name, nb=12):
-    """Rose estilo v2: sectores rellenos + círculos de referencia graduados con etiqueta
-    de escala radial (n sujetos por bin) + vector resultante. Cuadrado, PNG@300."""
+    """Rose con círculos concéntricos a cada n entero + etiqueta en cada anillo
+    a ~22° del eje vertical (estilo figura de referencia). Cuadrado PNG@300."""
     phi = np.asarray(phi, float); phi = phi[~np.isnan(phi)]
-    fig = plt.figure(figsize=(3.5, 3.5)); ax = fig.add_axes([0.02, 0.02, 0.96, 0.92])
+    fig = plt.figure(figsize=(3.5, 3.5)); ax = fig.add_axes([0.02, 0.04, 0.96, 0.88])
     ax.set_aspect("equal"); ax.axis("off")
     edges = np.linspace(-np.pi, np.pi, nb+1)
     counts, _ = np.histogram(phi, edges)
     n_outer = int(counts.max())
-    # Round reference values for scale circles
-    n_mid = max(1, round(n_outer / 2))
-    rmax = n_outer * 1.30 + 0.5
-    tt = np.linspace(0, 2*np.pi, 120)
-    # Draw sectors
+    rmax = n_outer * 1.25 + 0.5
+    tt = np.linspace(0, 2*np.pi, 200)
+    label_ang = np.pi / 8          # ~22.5° desde el cero (top), cuadrante sup-derecho
+    lx = np.sin(label_ang); ly = np.cos(label_ang)
+
+    # Círculo exterior de referencia (gris claro)
+    ax.plot(rmax*np.sin(tt), rmax*np.cos(tt), "-", color="0.72", lw=0.9, zorder=1)
+    # Círculos concéntricos a cada entero de 1..n_outer
+    for n_ref in range(1, n_outer + 1):
+        ax.plot(n_ref*np.sin(tt), n_ref*np.cos(tt), "-", color="0.78", lw=0.45, zorder=1)
+    # Etiqueta solo en valores pares (o todos si n_outer ≤ 6) para no saturar
+    step = 1 if n_outer <= 6 else 2
+    for n_ref in range(step, n_outer + 1, step):
+        ax.text(n_ref*lx*1.05, n_ref*ly*1.05, str(n_ref),
+                ha="left", va="bottom", fontsize=6.5, color="0.35", zorder=5)
+
+    # Cruces
+    ax.plot([-rmax, rmax], [0, 0], "-", color="0.82", lw=0.8, zorder=0)
+    ax.plot([0, 0], [-rmax, rmax], "-", color="0.82", lw=0.8, zorder=0)
+
+    # Sectores (encima de los círculos)
     for b in range(nb):
         if counts[b] == 0: continue
         th = np.linspace(edges[b], edges[b+1], 20)
         xs = np.concatenate([[0], counts[b]*np.sin(th), [0]])
         ys = np.concatenate([[0], counts[b]*np.cos(th), [0]])
-        ax.fill(xs, ys, color=color, alpha=0.85, edgecolor="white", lw=0.5, zorder=2)
-    # Outer frame circle (gray)
-    ax.plot(rmax*np.sin(tt), rmax*np.cos(tt), "-", color="0.75", lw=0.8, zorder=1)
-    # Radial scale: mid circle (dashed) + max circle (dashed)
-    for nr, ls in [(n_mid, ":"), (n_outer, "--")]:
-        ax.plot(nr*np.sin(tt), nr*np.cos(tt), ls, color="0.65", lw=0.7, zorder=1)
-        # Label at ~45° (upper-right quadrant)
-        ang45 = np.pi / 4
-        ax.text(nr*np.sin(ang45)*1.06, nr*np.cos(ang45)*1.06,
-                str(nr), ha="left", va="bottom", fontsize=7.5, color="0.40")
-    # Cross lines
-    ax.plot([-rmax, rmax], [0, 0], "-", color="0.85", lw=0.8, zorder=0)
-    ax.plot([0, 0], [-rmax, rmax], "-", color="0.85", lw=0.8, zorder=0)
-    # Mean resultant vector
+        ax.fill(xs, ys, color=color, alpha=0.80, edgecolor="white", lw=0.5, zorder=2)
+
+    # Vector resultante medio
     mu = np.angle(np.mean(np.exp(1j*phi)))
     ax.annotate("", xy=(rmax*0.88*R*np.sin(mu), rmax*0.88*R*np.cos(mu)), xytext=(0, 0),
                 arrowprops=dict(arrowstyle="-|>", color="k", lw=2.4), zorder=4)
-    # Cardinal labels and radius unit note
-    ax.text(0, rmax*1.08, "0", ha="center", va="bottom", fontsize=9)
-    ax.text(0, -rmax*1.08, "$\\pi$", ha="center", va="top", fontsize=10)
-    ax.text(0, -rmax*1.28, "radius = subjects per bin", ha="center", va="top",
-            fontsize=7, color="0.50")
-    ax.set_xlim(-rmax*1.20, rmax*1.20); ax.set_ylim(-rmax*1.35, rmax*1.15)
-    ax.set_title(f"{band_lbl}   R={R:.2f}  {stars}", fontsize=_FS_TITLE, fontweight="normal")
+
+    # Etiquetas cardinales 0 / π
+    ax.text(0, rmax*1.06, "0", ha="center", va="bottom", fontsize=9)
+    ax.text(0, -rmax*1.06, "$\\pi$", ha="center", va="top", fontsize=10)
+
+    ax.set_xlim(-rmax*1.16, rmax*1.16); ax.set_ylim(-rmax*1.14, rmax*1.14)
+    ax.set_title(f"{band_lbl}   R={R:.2f}  {stars}", fontsize=_FS_TITLE,
+                 fontweight="normal", pad=4)
     out = os.path.join(DIR_OUT, name+".png")
     fig.savefig(out, dpi=300, bbox_inches="tight", facecolor="white"); plt.close(fig)
     print(f"  saved {name}.png")
