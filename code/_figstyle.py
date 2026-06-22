@@ -20,8 +20,8 @@ COL = {
     "BETA":  "#CC79A7",  # reddish-purple
     "SIG":   "#E63232",  # red marker
 }
-LBL_CASE = "Chewing group\n(Cases, n=31)"
-LBL_CTRL = "Control / no-chew\n(n=15)"
+LBL_CASE = "Cases"
+LBL_CTRL = "Controls"
 
 # ── Tipografía homogénea ─────────────────────────────────────────────────────
 _FS_TITLE, _FS_LABEL, _FS_TICK, _FS_LEG = 12, 11, 9, 9
@@ -104,13 +104,79 @@ def refline(ax, y, label=None, style=":", color="gray", lw=0.9, alpha=1.0, lx=No
     ax.axhline(y, color=color, ls=style, lw=lw, alpha=alpha, zorder=1)
     if label:
         x = lx if lx is not None else ax.get_xlim()[1]
-        ax.text(x, y, label, va="center", ha="right", fontsize=_FS_TICK-1, color=color)
+        # etiqueta POR ENCIMA de la línea (no la cruza)
+        ax.text(x, y, label, va="bottom", ha="right", fontsize=_FS_TICK-1, color=color)
+
+def rose_v2(phi, R, color, band_lbl, stars, name, nb=12):
+    """Rose estilo v2: sectores rellenos desde el centro + círculo ref + cruz + vector
+    resultante (flecha) + etiquetas 0/π. axis equal off. Cuadrado, PNG@300."""
+    phi = np.asarray(phi, float); phi = phi[~np.isnan(phi)]
+    fig = plt.figure(figsize=(3.5, 3.5)); ax = fig.add_axes([0.02, 0.02, 0.96, 0.92])
+    ax.set_aspect("equal"); ax.axis("off")
+    edges = np.linspace(-np.pi, np.pi, nb+1)
+    counts, _ = np.histogram(phi, edges)
+    n_outer = int(counts.max())
+    rmax = n_outer * 1.25 + 0.5
+    for b in range(nb):
+        if counts[b] == 0: continue
+        th = np.linspace(edges[b], edges[b+1], 20)
+        xs = np.concatenate([[0], counts[b]*np.sin(th), [0]])
+        ys = np.concatenate([[0], counts[b]*np.cos(th), [0]])
+        ax.fill(xs, ys, color=color, alpha=0.85, edgecolor="white", lw=0.5, zorder=2)
+    tt = np.linspace(0, 2*np.pi, 100)
+    ax.plot(rmax*np.sin(tt), rmax*np.cos(tt), "-", color="0.75", lw=0.8, zorder=1)
+    ax.plot([-rmax, rmax], [0, 0], "-", color="0.85", lw=0.8, zorder=0)
+    ax.plot([0, 0], [-rmax, rmax], "-", color="0.85", lw=0.8, zorder=0)
+    mu = np.angle(np.mean(np.exp(1j*phi)))
+    ax.annotate("", xy=(rmax*0.9*R*np.sin(mu), rmax*0.9*R*np.cos(mu)), xytext=(0, 0),
+                arrowprops=dict(arrowstyle="-|>", color="k", lw=2.4), zorder=4)
+    ax.text(0, rmax*1.08, "0", ha="center", va="bottom", fontsize=9)
+    ax.text(0, -rmax*1.08, "$\\pi$", ha="center", va="top", fontsize=10)
+    # Radius scale label: outer ring = n_outer subjects per bin
+    ax.text(rmax*1.04, 0, f"n={n_outer}", ha="left", va="center", fontsize=7.5, color="0.45")
+    ax.set_xlim(-rmax*1.18, rmax*1.42); ax.set_ylim(-rmax*1.22, rmax*1.18)
+    ax.set_title(f"{band_lbl}   R={R:.2f}  {stars}", fontsize=_FS_TITLE, fontweight="normal")
+    out = os.path.join(DIR_OUT, name+".png")
+    fig.savefig(out, dpi=300, bbox_inches="tight", facecolor="white"); plt.close(fig)
+    print(f"  saved {name}.png")
 
 def symlog_zmi(ax, vals, thr=2):
     ax.set_yscale("symlog", linthresh=thr)
     ax.set_yticks([0, 2, 5, 10, 20, 50, 100])
     ax.yaxis.set_major_formatter(_mticker.ScalarFormatter())
     ax.set_ylim(min(np.min(vals), -1), np.max(vals)*1.18)
+
+def paired_box(ax, groups, ylabel, title=None, bw=0.32, gap=1.0):
+    """Boxplot (IQR+mediana+bigotes) por condición con puntos UNIDOS (pareados) y
+    significancia SOLO con asteriscos. groups: lista de dict(label,color,nc,ch,stars).
+    Sin n ni p en el plot."""
+    pos, labs = [], []
+    x = 0.0; ymax = -np.inf
+    for g in groups:
+        nc, ch = np.asarray(g["nc"], float), np.asarray(g["ch"], float)
+        xp = [x, x+1]; ymax = max(ymax, nc.max(), ch.max())
+        for i in range(len(nc)):                      # líneas pareadas (sin jitter)
+            ax.plot(xp, [nc[i], ch[i]], color=g["color"], alpha=0.10, lw=0.6, zorder=1)
+        for xi, dat in zip(xp, [nc, ch]):
+            q1, q2, q3 = np.percentile(dat, [25, 50, 75]); iqr = q3-q1
+            wlo = dat[dat >= q1-1.5*iqr].min(); whi = dat[dat <= q3+1.5*iqr].max()
+            ax.add_patch(_Rect((xi-bw/2, q1), bw, q3-q1, facecolor=g["color"], alpha=0.30,
+                               edgecolor=g["color"], lw=1.4, zorder=2))
+            ax.plot([xi-bw/2, xi+bw/2], [q2, q2], color=g["color"], lw=2.3, zorder=4)
+            ax.plot([xi, xi], [wlo, q1], color=g["color"], lw=1.0, zorder=2)
+            ax.plot([xi, xi], [q3, whi], color=g["color"], lw=1.0, zorder=2)
+            ax.scatter([xi]*len(dat), dat, s=14, color=g["color"], alpha=0.45,
+                       linewidths=0, zorder=3)
+        ax.text(x+0.5, 1.0, g["label"], transform=ax.get_xaxis_transform(),
+                ha="center", va="bottom", fontsize=_FS_TICK, color=g["color"])
+        pos += xp; labs += ["No-chew", "Chew"]
+        if g.get("stars"):
+            yb = max(nc.max(), ch.max())
+            sig_bracket(ax, xp[0], xp[1], yb*1.03 if yb > 0 else yb+0.03*abs(yb), g["stars"])
+        x += 2 + gap
+    ax.set_xticks(pos); ax.set_xticklabels(labs)
+    ax.set_xlim(-0.6, pos[-1]+0.6); ax.set_ylabel(ylabel)
+    if title: ax.set_title(title, pad=10)
 
 def robust_scatter(ax, x, y, color, xlabel, ylabel, title=None, s=34):
     """Scatter + recta robusta (Theil-Sen) + anotación rho/p (Spearman) — estilo figures_ok."""
