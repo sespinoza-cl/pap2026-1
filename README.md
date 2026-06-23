@@ -15,16 +15,19 @@ Repository: [github.com/sespinoza-cl/pap2026-1](https://github.com/sespinoza-cl/
 
 ## Quick start
 
-> **Requirements:** MATLAB R2025b (+ Statistics & Signal Processing Toolboxes; EEGLAB only for topoplots/.set)
-> and Python 3.10 (`numpy scipy h5py matplotlib mne fooof statsmodels pandas`).
+> **Requirements:** MATLAB R2025b + Statistics & Signal Processing Toolboxes + EEGLAB.
+> Python is only required for FOOOF/specparam fitting (`fooof_fit.py`, called automatically by `S3b_FOOOF_fromPython.m`).
 
-All pre-computed result workspaces are in `outputs/stats/` (~6.5 MB). Figures regenerate from them:
+All pre-computed result workspaces are in `outputs/stats/`. To regenerate figures from them:
 
-```bash
-# Python figures (read outputs/stats/, write outputs/figures/)
-python code/figA_py.py && python code/figA2_py.py && python code/figB_py.py
-# MATLAB topoplots / CMC topography
-matlab -batch "cd('code'); figA_topo; rev_cmc_topography"
+```matlab
+% From Analysis_V1_Final/ in MATLAB:
+run S0_config
+run code/S2c_TF_GroupFigure   % TF + topo
+run code/S3c_FOOOF_paper_figs  % FOOOF panels
+run code/S4b_PAC_figs          % PAC panels
+run code/rev_cmc_topography    % CMC topography
+run code/figA_topo             % topoplots
 ```
 
 Full step-by-step map (every result → script → data): see **[`REPRODUCE.md`](REPRODUCE.md)**.
@@ -36,8 +39,8 @@ Full step-by-step map (every result → script → data): see **[`REPRODUCE.md`]
 pap2026-1/
 ├── REPRODUCE.md              ← full reproducibility map (start here)
 ├── S0_config.m               ← single config (bands θ4–7/α8–13/β13–30, ROI-18, windows, seed=42)
-├── code/                     ← analysis + figure scripts (MATLAB S*.m + Python)
-│   ├── S1..S8 (canonical pipeline) · _figstyle.py (figure style)
+├── code/                     ← analysis + figure scripts (MATLAB S*.m + fooof_fit.py)
+│   ├── S1..S8 (canonical pipeline) + fooof_fit.py (FOOOF bridge for S3b)
 │   └── rev_*  (revision analyses: single-trial bridge, CMC topography, cross-study aperiodic)
 ├── outputs/
 │   ├── stats/                ← pre-computed .mat (reproduce figures without raw EEG)
