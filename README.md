@@ -46,16 +46,6 @@ pap2026-1/
 └── (raw EEG/EMG .set NOT included — see Data availability)
 ```
 
-## Key results (canonical)
-- **Behaviour:** chewing improves RT/IES within chewers (Wilcoxon p≤0.001); differential Group×Block a trend
-  (p=0.054; sensitivity: design powered only for large interactions, d≥0.90).
-- **TF/topo:** chew>no-chew cluster in chewers (p=0.005), interaction p=0.010; frontal-medial theta (Fpz/AFz FDR; temporal 0/6).
-- **FOOOF:** genuine theta peak (97%); aperiodic exponent flattens χ 1.110→0.735 (p<0.0001).
-- **PAC:** θ coupling over double null (22/31 circular, 21/31 AAFT); condition-specific; negative control 1/15.
-- **β = residual EMG:** per-electrode CMC diffuse/temporal (peak T8), no central maximum → not corticomuscular coherence.
-- **Brain–behaviour bridge:** single-trial late frontal-medial θ tracks RT (LMM −41.8 ms, p=0.0007; 23/31).
-- **Cross-study:** aperiodic also flattens offline (re-analysis of Espinoza et al. 2025; Δχ=−0.09, p=0.005).
-
 ## Design
 46 healthy adults: 31 Cases (chewed in block 2) + 15 Controls (no-chew practice control). Visuospatial 2-back.
 BioSemi 64+8 (bilateral masseter EMG), 1024→256 Hz. ROI-18 frontal-medial. Bands θ 4–7 / α 8–13 / β 13–30 Hz.

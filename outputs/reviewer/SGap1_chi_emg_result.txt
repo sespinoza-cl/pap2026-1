@@ -1,0 +1,19 @@
+=== GAP #1: Δχ × EMG RMS — P2V1 ===
+Fecha: 2026-06-23 15:00
+N_CASES=31 | seed=42
+
+Δχ = χ_Nc - χ_Ch (>0 = aplanamiento durante chewing)
+Δχ media=0.429 ± 0.234 (mediana=0.455) | n=31
+
+--- RESULTADO PRINCIPAL ---
+Δχ × EMG masetero RMS (Spearman): rho=+0.287  p=0.1168
+Veredicto: n.s. (OK): aplanamiento aperiodico no escala con amplitud muscular
+
+--- CONSISTENCIA MECANISMO ---
+Δχ × Δtheta ROI (Spearman): rho=-0.194  p=0.2935
+Δtheta × EMG RMS (ref A3):  rho=-0.221  p=0.2321 (canonical ≈-0.22 n.s.)
+
+--- INTERPRETACIÓN ---
+El aplanamiento de χ no escala con la amplitud del masetero.
+Junto con A3 (Δtheta n.s. con EMG), ambos efectos se disocian
+del artefacto muscular → interpretación cortical sostenida.

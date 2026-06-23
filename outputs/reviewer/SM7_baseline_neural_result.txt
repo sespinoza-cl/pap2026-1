@@ -1,0 +1,13 @@
+=== SM7: Equivalencia neural baseline — P2V1 ===
+Fecha: 2026-06-23 15:00
+N_CASES=31 | N_CONTROLS=15 | seed=42
+
+Contraste: Cases-NoChew vs Controls-NoChew | theta 4–7 Hz | WIN_LATE=[900,1300]ms
+
+Cases    theta: -0.0723 ± 0.9040 dB
+Controls theta: 0.6576 ± 0.8150 dB
+
+Mann-Whitney U: W=616  p=0.0087
+Label-shuffle CBPT (5000 perm): obs_diff=-0.7299  p=0.0098
+
+Veredicto M7: GRUPOS DIFIEREN en baseline neural — revisar exclusiones

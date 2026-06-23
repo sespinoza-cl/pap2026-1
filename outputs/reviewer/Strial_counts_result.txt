@@ -1,0 +1,12 @@
+=== Trial Counts — P2V1 ===
+Fecha: 2026-06-23 15:01
+
+Fuente: epoch files (C:\Users\Pc - Casa\Desktop\Proyectos_Claude\Phd\Paper2\P2V1\Data_PAC\Epochs)
+
+Condición Ch  : media=76.2 ± 23.3 | total=3504 | n_subj=46
+Condición Nc  : media=77.6 ± 19.3 | total=3569 | n_subj=46
+
+Total ALL: 7073  → >4200? SÍ
+Media por condición-sujeto: 76.9 ± 21.3 (paper dice 64.4 ± 17.7)
+
+Single-trial CSV (Cases-Ch hits): 2127 (paper dice 2,127)
